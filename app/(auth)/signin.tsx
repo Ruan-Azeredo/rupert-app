@@ -1,19 +1,17 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
-import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlHelper, FormControlHelperText, FormControlLabel, FormControlLabelText } from "@/components/ui/form-control";
+import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText, FormControlLabel, FormControlLabelText } from "@/components/ui/form-control";
 import { Heading } from "@/components/ui/heading";
-import { EyeIcon, EyeOffIcon } from "@/components/ui/icon";
+import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
-import { useAuth } from "@/contexts/auth";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
+import { Formik } from "formik";
 import { MoveLeft } from "lucide-react-native";
 import { StyleSheet, Text } from "react-native";
 
 export default function Singin() {
-
-	const {login} = useAuth()
 
 	return (
 		<ParallaxScrollView
@@ -37,77 +35,118 @@ export default function Singin() {
 				</Link>
 				<Heading size="3xl">Registre-se</Heading>
 				{/* <Button onPress={() => login('ruan')} title="ruan"/> */}
-				<Box className="gap-8">
-					<FormControl
-						size="md"
-					>
-						<FormControlLabel>
-							<FormControlLabelText>Email</FormControlLabelText>
-						</FormControlLabel>
-						<Input className="my-1 w-full">
-							<InputField
-								type="text"
-								placeholder="Digite seu email"
-							/>
-						</Input>
-						<FormControlHelper>
-							<FormControlHelperText>Deve ser um Email válido.</FormControlHelperText>
-						</FormControlHelper>
-						<FormControlError>
-							<FormControlErrorIcon />
-							<FormControlErrorText />
-						</FormControlError>
-					</FormControl>
-					<FormControl
-						size="md"
-					>
-						<FormControlLabel>
-							<FormControlLabelText>Senha</FormControlLabelText>
-						</FormControlLabel>
-						<Input className="my-1 w-full">
-							<InputField
-								type={true ? "password" : "text"}
-								placeholder="Digite sua senha"
-							/>
-							<InputSlot className="pr-3">
-								<InputIcon as={true ? EyeOffIcon : EyeIcon}/>
-							</InputSlot>
-						</Input>
-						<FormControlHelper>
-							<FormControlHelperText>Deve possuir pelo menos 6 caracteres.</FormControlHelperText>
-						</FormControlHelper>
-						<FormControlError>
-							<FormControlErrorIcon />
-							<FormControlErrorText />
-						</FormControlError>
-					</FormControl>
-					<FormControl
-						size="md"
-					>
-						<FormControlLabel>
-							<FormControlLabelText>Confirme a Senha</FormControlLabelText>
-						</FormControlLabel>
-						<Input className="my-1 w-full">
-							<InputField
-								type={true ? "password" : "text"}
-								placeholder="Confirme sua senha"
-							/>
-							<InputSlot className="pr-3">
-								<InputIcon as={true ? EyeOffIcon : EyeIcon}/>
-							</InputSlot>
-						</Input>
-						<FormControlHelper>
-							<FormControlHelperText>Deve ser igual a digitada anteriormente.</FormControlHelperText>
-						</FormControlHelper>
-						<FormControlError>
-							<FormControlErrorIcon />
-							<FormControlErrorText />
-						</FormControlError>
-					</FormControl>
-				</Box>
-				<Button>
-					<ButtonText>Confirmar</ButtonText>
-				</Button>
+				<Formik
+					initialValues={{
+						email: '',
+						password: '',
+						confirmPassword: ''
+					}}
+					validate={values => {
+						const errors: {
+							email: string | null
+							password: string | null
+							confirmPassword: string | null
+						} = {
+							email: null,
+							password: null,
+							confirmPassword: null
+						};
+						if (!values.email) {
+							errors.email = 'Required';
+						} else if (
+							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+						) {
+							errors.email = 'Endereço de email invalido';
+						}
+						return errors;
+					}}
+					onSubmit={values => console.log(values)}
+				>
+					{({ handleChange, handleBlur, handleSubmit, values, errors}) => (
+						<Box className="gap-16">
+							<Box className="gap-8">
+							<FormControl
+								size="md"
+								isInvalid={errors.email ? true : false}
+							>
+								<FormControlLabel>
+									<FormControlLabelText>Email</FormControlLabelText>
+								</FormControlLabel>
+								<Input className="my-1 w-full">
+									<InputField
+										type="text"
+										placeholder="Digite seu email"
+										onChangeText={handleChange('email')}
+										onBlur={handleBlur('email')}
+									/>
+								</Input>
+								{/* <FormControlHelper>
+									<FormControlHelperText>Deve ser um Email válido.</FormControlHelperText>
+								</FormControlHelper> */}
+								<FormControlError>
+									<FormControlErrorIcon as={AlertCircleIcon}/>
+									<FormControlErrorText>
+										{errors.email}
+									</FormControlErrorText>
+								</FormControlError>
+							</FormControl>
+							<FormControl
+								size="md"
+							>
+								<FormControlLabel>
+									<FormControlLabelText>Senha</FormControlLabelText>
+								</FormControlLabel>
+								<Input className="my-1 w-full">
+									<InputField
+										type={true ? "password" : "text"}
+										placeholder="Digite sua senha"
+										onChangeText={handleChange('password')}
+										onBlur={handleBlur('password')}
+									/>
+									<InputSlot className="pr-3">
+										<InputIcon as={true ? EyeOffIcon : EyeIcon}/>
+									</InputSlot>
+								</Input>
+								{/* <FormControlHelper>
+									<FormControlHelperText>Deve possuir pelo menos 6 caracteres.</FormControlHelperText>
+								</FormControlHelper> */}
+								<FormControlError>
+									<FormControlErrorIcon />
+									<FormControlErrorText />
+								</FormControlError>
+							</FormControl>
+							<FormControl
+								size="md"
+							>
+								<FormControlLabel>
+									<FormControlLabelText>Confirme a Senha</FormControlLabelText>
+								</FormControlLabel>
+								<Input className="my-1 w-full">
+									<InputField
+										type={true ? "password" : "text"}
+										placeholder="Confirme sua senha"
+										onChangeText={handleChange('confirmPassword')}
+										onBlur={handleBlur('confirmPassword')}
+									/>
+									<InputSlot className="pr-3">
+										<InputIcon as={true ? EyeOffIcon : EyeIcon}/>
+									</InputSlot>
+								</Input>
+								{/* <FormControlHelper>
+									<FormControlHelperText>Deve ser igual a digitada anteriormente.</FormControlHelperText>
+								</FormControlHelper> */}
+								<FormControlError>
+									<FormControlErrorIcon />
+									<FormControlErrorText />
+								</FormControlError>
+							</FormControl>
+						</Box>
+						<Button onPress={() => handleSubmit()}>
+							<ButtonText>Confirmar</ButtonText>
+						</Button>
+					</Box>
+					)}
+				</Formik>
 			</Box>
 		</ParallaxScrollView>
 	)
