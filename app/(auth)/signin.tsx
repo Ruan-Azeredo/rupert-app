@@ -17,25 +17,6 @@ export default function Singin() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-	const login = (email: string, password: string) => {
-		console.log('signin', { email, password });
-		
-		fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/users', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}).then(res => {
-			if (res.ok) {
-				return res.json();
-			}
-		}).then(users => {
-			console.log(users)
-		}).catch(error => {
-			console.log('Error fetching users:', error);
-		})
-	}
-
 	const signin = (email: string, password: string) => {
 		console.log('singin', { email, password });
 
