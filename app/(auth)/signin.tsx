@@ -17,7 +17,7 @@ export default function Singin() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-	const signin = (email: string, password: string) => {
+	const login = (email: string, password: string) => {
 		console.log('signin', { email, password });
 		
 		fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/users', {
@@ -25,7 +25,38 @@ export default function Singin() {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		}).then(response => {console.log(response.json())})
+		}).then(res => {
+			if (res.ok) {
+				return res.json();
+			}
+		}).then(users => {
+			console.log(users)
+		}).catch(error => {
+			console.log('Error fetching users:', error);
+		})
+	}
+
+	const signin = (email: string, password: string) => {
+		console.log('singin', { email, password });
+
+		fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/users', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email,
+				password
+			})
+		}).then(res => {
+			if (res.ok) {
+				return res.json();
+			}
+		}).then(user => {
+			console.log(user)
+		}).catch(error => {
+			console.log('Error fetching users:', error);
+		})
 	}
 
 	return (
@@ -196,4 +227,4 @@ const styles = StyleSheet.create({
 		left: 0,
 		position: 'absolute',
 	},
-  });
+});
