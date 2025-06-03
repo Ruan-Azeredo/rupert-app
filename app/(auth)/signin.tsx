@@ -9,9 +9,24 @@ import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Formik } from "formik";
 import { MoveLeft } from "lucide-react-native";
+import { useState } from "react";
 import { StyleSheet, Text } from "react-native";
 
 export default function Singin() {
+
+	const [showPassword, setShowPassword] = useState(false)
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+	const signin = (email: string, password: string) => {
+		console.log('signin', { email, password });
+		
+		fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/users', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		}).then(response => {console.log(response.json())})
+	}
 
 	return (
 		<ParallaxScrollView
@@ -42,25 +57,34 @@ export default function Singin() {
 						confirmPassword: ''
 					}}
 					validate={values => {
+
 						const errors: {
-							email: string | null
-							password: string | null
-							confirmPassword: string | null
-						} = {
-							email: null,
-							password: null,
-							confirmPassword: null
-						};
+							email?: string | null;
+							password?: string | null;
+							confirmPassword?: string | null;
+						} = {};
+
 						if (!values.email) {
 							errors.email = 'Required';
-						} else if (
-							!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-						) {
+						} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
 							errors.email = 'Endereço de email invalido';
 						}
+
+						if(!values.password) {
+							errors.password = 'Required';
+						} else if (values.password.length < 6) {
+							errors.password = 'Deve possuir pelo menos 6 caracteres';
+						}
+
+						if(!values.confirmPassword) {
+							errors.confirmPassword = 'Required';
+						} else if (values.confirmPassword !== values.password) {
+							errors.confirmPassword = 'Deve ser igual a digitada anteriormente';
+						}
+						
 						return errors;
 					}}
-					onSubmit={values => console.log(values)}
+					onSubmit={values => signin(values.email, values.password)}
 				>
 					{({ handleChange, handleBlur, handleSubmit, values, errors}) => (
 						<Box className="gap-16">
@@ -68,6 +92,7 @@ export default function Singin() {
 							<FormControl
 								size="md"
 								isInvalid={errors.email ? true : false}
+								className="h-24"
 							>
 								<FormControlLabel>
 									<FormControlLabelText>Email</FormControlLabelText>
@@ -92,56 +117,67 @@ export default function Singin() {
 							</FormControl>
 							<FormControl
 								size="md"
+								isInvalid={errors.password ? true : false}
+								className="h-24"
 							>
 								<FormControlLabel>
 									<FormControlLabelText>Senha</FormControlLabelText>
 								</FormControlLabel>
 								<Input className="my-1 w-full">
 									<InputField
-										type={true ? "password" : "text"}
+										type={!showPassword ? "password" : "text"}
 										placeholder="Digite sua senha"
 										onChangeText={handleChange('password')}
 										onBlur={handleBlur('password')}
 									/>
-									<InputSlot className="pr-3">
-										<InputIcon as={true ? EyeOffIcon : EyeIcon}/>
+									<InputSlot className="pr-3" onPress={() => setShowPassword(!showPassword)}>
+										<InputIcon as={!showPassword ? EyeOffIcon : EyeIcon}/>
 									</InputSlot>
 								</Input>
 								{/* <FormControlHelper>
 									<FormControlHelperText>Deve possuir pelo menos 6 caracteres.</FormControlHelperText>
 								</FormControlHelper> */}
 								<FormControlError>
-									<FormControlErrorIcon />
-									<FormControlErrorText />
+									<FormControlErrorIcon as={AlertCircleIcon}/>
+									<FormControlErrorText>
+										{errors.password}
+									</FormControlErrorText>
 								</FormControlError>
 							</FormControl>
 							<FormControl
 								size="md"
+								isInvalid={errors.confirmPassword ? true : false}
+								className="h-24"
 							>
 								<FormControlLabel>
 									<FormControlLabelText>Confirme a Senha</FormControlLabelText>
 								</FormControlLabel>
 								<Input className="my-1 w-full">
 									<InputField
-										type={true ? "password" : "text"}
+										type={!showConfirmPassword ? "password" : "text"}
 										placeholder="Confirme sua senha"
 										onChangeText={handleChange('confirmPassword')}
 										onBlur={handleBlur('confirmPassword')}
 									/>
-									<InputSlot className="pr-3">
-										<InputIcon as={true ? EyeOffIcon : EyeIcon}/>
+									<InputSlot className="pr-3" onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+										<InputIcon as={!showConfirmPassword ? EyeOffIcon : EyeIcon}/>
 									</InputSlot>
 								</Input>
 								{/* <FormControlHelper>
 									<FormControlHelperText>Deve ser igual a digitada anteriormente.</FormControlHelperText>
 								</FormControlHelper> */}
 								<FormControlError>
-									<FormControlErrorIcon />
-									<FormControlErrorText />
+									<FormControlErrorIcon as={AlertCircleIcon}/>
+									<FormControlErrorText>
+										{errors.confirmPassword}
+									</FormControlErrorText>
 								</FormControlError>
 							</FormControl>
 						</Box>
-						<Button onPress={() => handleSubmit()}>
+						<Button onPress={() => {
+							console.log('handleSubmit', { values, errors });
+							handleSubmit()
+						}}>
 							<ButtonText>Confirmar</ButtonText>
 						</Button>
 					</Box>
