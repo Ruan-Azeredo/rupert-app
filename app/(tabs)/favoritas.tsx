@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/auth";
 import { Button, Text, View } from "react-native";
 
-export default function Explore() {
+export default function Favoritas() {
 
 	const {logout} = useAuth()
 
