@@ -33,8 +33,8 @@ export default function Index() {
 				{/* <Button onPress={() => login('ruan')} title="ruan"/> */}
 				<Formik
 					initialValues={{
-						email: 'Maribel_Friesen@hotmail.com',
-						password: 'CFfGCwEo7v5ReRM',
+						email: '',
+						password: '',
 						confirmPassword: ''
 					}}
 					validate={values => {

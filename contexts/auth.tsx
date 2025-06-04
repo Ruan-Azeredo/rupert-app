@@ -1,3 +1,4 @@
+import { Toast, ToastDescription, ToastTitle, useToast } from '@/components/ui/toast';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 interface AuthContextType {
@@ -16,7 +17,33 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+
+	const toast = useToast()
+	
+	const showNewToast = (title: string, description: string) => {
+		const newId = Math.random()
+		toast.show({
+			id: newId + 'toast',
+			placement: "top",
+			duration: 3000,
+			render: ({ id }) => {
+				const uniqueToastId = "toast-" + id
+				return (
+					<Toast
+					nativeID={uniqueToastId} action="muted" variant="solid">
+						<ToastTitle>{title}</ToastTitle>
+						<ToastDescription>
+						{description}
+						</ToastDescription>
+					</Toast>
+				)
+			}
+
+		})
+	}
+
     const [user, setUser] = useState<{
         username: string;
         favorites_revenues_id?: number[];
@@ -46,9 +73,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
             console.log('users fetched', users);
 			const user = users.find((user: any) => user.email === email && user.password === password)
-			user ? setUser(user) : console.log('Usuário ou senha inválidos')
+			user ? setUser(user) : console.log('Usuário ou senha inválidos'); showNewToast('Ops!', 'Usuário ou senha inválidos');
 		}).catch(error => {
 			console.log('Error fetching users:', error);
+			showNewToast('Ops!', 'Erro ao validar suar credenciais');
 		})
 	}
 
@@ -70,8 +98,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
 		}).then(user => {
 			console.log(user)
+			showNewToast('Successo!', 'Usuario cadastrado com sucesso');
 		}).catch(error => {
 			console.log('Error fetching users:', error);
+			showNewToast('Ops!', 'Erro ao cadastrar suar credenciais');
 		})
 	}
 
