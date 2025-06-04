@@ -1,5 +1,5 @@
-import RevenueCard from "@/components/RevenueCard";
-import { Box } from "@/components/ui/box";
+import RevenueCard from "@/src/components/RevenueCard";
+import { Box } from "@/src/components/ui/box";
 import { useEffect, useState } from "react";
 import { ScrollView, Text } from "react-native";
 

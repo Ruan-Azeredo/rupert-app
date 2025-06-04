@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/src/contexts/auth";
 import { LogOut } from "lucide-react-native";
 import { Pressable, Text } from "react-native";
 

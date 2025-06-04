@@ -1,5 +1,5 @@
 
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/src/contexts/auth";
 import { Bookmark } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Image, Pressable, Text } from "react-native";

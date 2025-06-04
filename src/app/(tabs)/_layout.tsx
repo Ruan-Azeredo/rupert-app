@@ -1,5 +1,5 @@
 
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/src/contexts/auth";
 import { Redirect, Tabs } from "expo-router";
 import { Bookmark, ChefHat, LogOut } from "lucide-react-native";
 import LogoutButton from "./Logout";
