@@ -10,6 +10,8 @@ interface AuthContextType {
     login: (email: string, password: string) => void;
     logout: () => void;
     signin: (email: string, password: string) => void;
+	recipes: any[];
+	setRecipes: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,12 +22,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         favorites_revenues_id?: number[];
         createdAt?: string;
         id?: number;
-    } | null>({
-        username: 'guest',
-        favorites_revenues_id: [],
-        createdAt: new Date().toISOString(),
-        id: 0
-    });
+    } | null>(null);
+
+	const [recipes, setRecipes] = useState<any[]>([]);
 
     const login = (email: string, password: string) => {
 		console.log('signin', { email, password });
@@ -78,10 +77,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const logout = () => {
         setUser(null);
+		setRecipes([]);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, signin }}>
+        <AuthContext.Provider value={{ user, login, logout, signin, recipes, setRecipes }}>
             {children}
         </AuthContext.Provider>
     );

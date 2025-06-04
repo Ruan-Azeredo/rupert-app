@@ -1,9 +1,11 @@
 import RevenueCard from "@/src/components/RevenueCard";
 import { Box } from "@/src/components/ui/box";
 import { Input, InputField, InputIcon, InputSlot } from "@/src/components/ui/input";
-import { Search } from "lucide-react-native";
+import { useAuth } from "@/src/contexts/auth";
+import { PlusCircleIcon, Search } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
+import RNPickerSelect from 'react-native-picker-select';
 
 type Revnue = {
     createdAt: string; // ISO date string
@@ -21,29 +23,38 @@ type Revnue = {
 
 export default function Receitas() {
 
+    const { setRecipes, recipes } = useAuth();
+
     const [revenues, setRevenues] = useState<Revnue[]>([]);
 
     useEffect(() => {
-        fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/revenues', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}).then(res => {
-			if (res.ok) {
-				return res.json();
-			}
-		}).then(rev => {
-			if (!rev) {
-				return;
-			}
-            console.log('revenues fetched');
-            setRevenues(rev);
-            setFilteredRevenues(rev);
-			
-		}).catch(error => {
-			console.log('Error fetching revenues:', error);
-		})
+        if(recipes.length > 0) {
+            setRevenues(recipes);
+            setFilteredRevenues(recipes);
+            return;
+        } else {
+            fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/revenues', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+            }).then(rev => {
+                if (!rev) {
+                    return;
+                }
+                console.log('revenues fetched');
+                setRevenues(rev);
+                setFilteredRevenues(rev);
+                setRecipes(rev);
+                
+            }).catch(error => {
+                console.log('Error fetching revenues:', error);
+            })
+        }
     }, [])
 
 
@@ -57,6 +68,14 @@ export default function Receitas() {
         }
         const searchTerm = searchQuery.toLowerCase()
         setFilteredRevenues(revenues.filter(task => task.name.toLowerCase().includes(searchTerm)))
+    }
+
+    const filterByType = (type: string) => {
+        if(type === 'all' || type === null || type === undefined) {
+            setFilteredRevenues(revenues);
+            return;
+        }
+        setFilteredRevenues(revenues.filter(revenue => revenue.type.toLowerCase() === type.toLowerCase()));
     }
 
     return (
@@ -78,6 +97,20 @@ export default function Receitas() {
                     <InputIcon as={Search}/>
                 </InputSlot>
             </Input>
+            <Box className="my-4 w-36 ml-auto text-gray-400">
+                <RNPickerSelect
+                    onValueChange={(value) => filterByType(value)}
+                    placeholder={{ label: 'Filtre por tipo', value: null }}
+                    items={[
+                        { label: 'Massa', value: 'Massa' },
+                        { label: 'Brasileira', value: 'Brasileira' },
+                        { label: 'Salada', value: 'Salada' },
+                    ]}
+                    Icon={() => {
+                        return <PlusCircleIcon color="#9ca3af" size={20} />
+                    }}
+                />
+            </Box>
             {filteredRevenues.map((revenue, index) => (
                 <Box className="my-3" key={index}>
                     <RevenueCard {...revenue} />
