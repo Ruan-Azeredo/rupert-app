@@ -5,6 +5,7 @@ import { FormControl, FormControlError, FormControlErrorIcon, FormControlErrorTe
 import { Heading } from "@/components/ui/heading";
 import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "@/components/ui/icon";
 import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { useAuth } from "@/contexts/auth";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { Formik } from "formik";
@@ -14,31 +15,10 @@ import { StyleSheet, Text } from "react-native";
 
 export default function Singin() {
 
+	const { signin } = useAuth()
+
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
-	const signin = (email: string, password: string) => {
-		console.log('singin', { email, password });
-
-		fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/users', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				email,
-				password
-			})
-		}).then(res => {
-			if (res.ok) {
-				return res.json();
-			}
-		}).then(user => {
-			console.log(user)
-		}).catch(error => {
-			console.log('Error fetching users:', error);
-		})
-	}
 
 	return (
 		<ParallaxScrollView

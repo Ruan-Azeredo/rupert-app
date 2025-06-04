@@ -14,32 +14,9 @@ import { StyleSheet, Text } from "react-native";
 
 export default function Index() {
 
-	const auth = useAuth()
+	const { login } = useAuth()
 
 	const [showPassword, setShowPassword] = useState(false)
-
-	const login = (email: string, password: string) => {
-		console.log('signin', { email, password });
-		
-		fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/users', {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		}).then(res => {
-			if (res.ok) {
-				return res.json();
-			}
-		}).then(users => {
-			if (!users) {
-				return;
-			}
-			const user = users.find((user: any) => user.email === email && user.password === password)
-			user ? auth.login(user.email) : console.log('Usuário ou senha inválidos')
-		}).catch(error => {
-			console.log('Error fetching users:', error);
-		})
-	}
 
 	return (
 		<ParallaxScrollView
@@ -56,8 +33,8 @@ export default function Index() {
 				{/* <Button onPress={() => login('ruan')} title="ruan"/> */}
 				<Formik
 					initialValues={{
-						email: '',
-						password: '',
+						email: 'Maribel_Friesen@hotmail.com',
+						password: 'CFfGCwEo7v5ReRM',
 						confirmPassword: ''
 					}}
 					validate={values => {
