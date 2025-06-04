@@ -1,7 +1,7 @@
-import ParallaxScrollView from "@/src/components/ParallaxScrollView";
-import { Box } from "@/src/components/ui/box";
-import { Heading } from "@/src/components/ui/heading";
-import { useAuth } from "@/src/contexts/auth";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { Box } from "@/components/ui/box";
+import { Heading } from "@/components/ui/heading";
+import { useAuth } from "@/contexts/auth";
 import { Link, useLocalSearchParams } from "expo-router";
 import { Calendar, Clock, MoveLeft, User } from "lucide-react-native";
 import { Image, StyleSheet, Text } from "react-native";

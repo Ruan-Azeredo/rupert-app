@@ -4,7 +4,7 @@
     "slug": "Rupert",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/rupert-a.png",
+    "icon": "./assets/images/rupert-a.png",
     "scheme": "rupertapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,8 +14,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#16a34a",
         "userInterfaceStyle": "automatic"
       },
       "edgeToEdgeEnabled": true
@@ -23,17 +23,17 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./src/assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./src/assets/images/rupert-a.png",
+          "image": "./assets/images/rupert-a.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#519358"
+          "backgroundColor": "#16a34a"
         }
       ]
     ],

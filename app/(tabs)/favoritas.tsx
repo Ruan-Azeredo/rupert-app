@@ -1,7 +1,7 @@
-import RevenueCard from "@/src/components/RevenueCard";
-import { Box } from "@/src/components/ui/box";
-import { Input, InputField, InputIcon, InputSlot } from "@/src/components/ui/input";
-import { useAuth } from "@/src/contexts/auth";
+import RevenueCard from "@/components/RevenueCard";
+import { Box } from "@/components/ui/box";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { useAuth } from "@/contexts/auth";
 import { PlusCircleIcon, Search } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
@@ -21,16 +21,16 @@ type Revnue = {
 };
 
 
-export default function Receitas() {
+export default function Favoritas() {
 
-    const { setRecipes, recipes } = useAuth();
+    const { setRecipes, recipes, user } = useAuth();
 
     const [revenues, setRevenues] = useState<Revnue[]>([]);
 
     useEffect(() => {
         if(recipes.length > 0) {
-            setRevenues(recipes);
-            setFilteredRevenues(recipes);
+            setRevenues(recipes.filter(item => user?.favorites_revenues_id?.includes(parseInt(item.id))));
+            setFilteredRevenues(recipes.filter(item => user?.favorites_revenues_id?.includes(parseInt(item.id))));
             return;
         } else {
             fetch('https://683e489b1cd60dca33daeb66.mockapi.io/api/revenues', {
@@ -42,14 +42,14 @@ export default function Receitas() {
                 if (res.ok) {
                     return res.json();
                 }
-            }).then(rev => {
+            }).then((rev: Revnue[]) => {
                 if (!rev) {
                     return;
                 }
                 console.log('revenues fetched');
-                setRevenues(rev);
-                setFilteredRevenues(rev);
-                setRecipes(rev);
+                setRevenues(rev.filter(item => user?.favorites_revenues_id?.includes(parseInt(item.id))));
+                setFilteredRevenues(rev.filter(item => user?.favorites_revenues_id?.includes(parseInt(item.id))));
+                setRecipes(rev.filter(item => user?.favorites_revenues_id?.includes(parseInt(item.id))));
                 
             }).catch(error => {
                 console.log('Error fetching revenues:', error);

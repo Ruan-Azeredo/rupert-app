@@ -1,4 +1,4 @@
-import { useAuth } from "@/src/contexts/auth";
+import { useAuth } from "@/contexts/auth";
 import { Redirect, Slot } from "expo-router";
 
 export default function AuthLayout() {

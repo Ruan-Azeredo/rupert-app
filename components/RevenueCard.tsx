@@ -1,5 +1,5 @@
 
-import { useAuth } from "@/src/contexts/auth";
+import { useAuth } from "@/contexts/auth";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import { Bookmark } from "lucide-react-native";
