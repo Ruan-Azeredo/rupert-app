@@ -1,5 +1,7 @@
 
 import { useAuth } from "@/src/contexts/auth";
+import { useNavigation } from "@react-navigation/native";
+import { router } from "expo-router";
 import { Bookmark } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Image, Pressable, Text } from "react-native";
@@ -30,8 +32,8 @@ export default function RevenueCard({
     image,
     id,
 }: Revnue) {
-
-    const { user } = useAuth()
+    const { user } = useAuth();
+    const navigation = useNavigation();
 
 	const [fav, setFav] = useState(false)
 
@@ -52,7 +54,17 @@ export default function RevenueCard({
     }, [user, id])
 
     return (
-        <Pressable className="bg-white rounded-lg shadow-sm shadow-slate-200">
+        <Pressable className="bg-white rounded-lg shadow-sm shadow-slate-200"
+            onPress={() => {
+                router.push({
+                pathname: "/receitas/[id]",
+                params: {
+                    id, // será acessível na tela de detalhes
+                    // Você pode passar outros dados via context ou global store se quiser
+                },
+                });
+            }}
+        >
             <Image
               className="w-full h-32 rounded-t-lg"
               source={{ uri: image}}
@@ -61,15 +73,11 @@ export default function RevenueCard({
                 <Box className="w-full flex-1">
 					<Text className="font-bold text-lg">{name}</Text>
 					<Box className="flex-row">
-						{ingredients.map((ingredient, index) => {
-							return index < 3 ? (
-								<Text className="text-xs text-gray-400" key={index}>{ingredient.name}, </Text>
-							) : null;
-						})}
+                        <Text className="text-xs text-gray-400">{ingredients[0]?.name + ' ,' + ingredients[1]?.name  + ' ,' +  ingredients[2]?.name + '...'}</Text>
 					</Box>
                 </Box>
                 <Box className="items-end gap-1">
-					{fav ? <Bookmark size={20} color='#3b82f6' fill='#3b82f6'/> : <Bookmark size={20} color='#3b82f6' fill='transparent'/>}
+					{fav ? <Bookmark size={20} color='#16a34a' fill='#16a34a'/> : <Bookmark size={20} color='#16a34a' fill='transparent'/>}
 					<Text className="text-sm text-gray-900">{preparation_time} min</Text>
                 </Box>
             </Box>

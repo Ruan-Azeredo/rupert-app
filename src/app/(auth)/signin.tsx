@@ -22,7 +22,7 @@ export default function Singin() {
 
 	return (
 		<ParallaxScrollView
-			headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+			headerBackgroundColor={{ light: '#16a34a', dark: '#16a34a' }}
 			headerImage={
 				<Image
 					source={require('@/assets/images/bg-foods.png')}
@@ -166,7 +166,7 @@ export default function Singin() {
 								</FormControlError>
 							</FormControl>
 						</Box>
-						<Button onPress={() => {
+						<Button className="bg-green-600" onPress={() => {
 							console.log('handleSubmit', { values, errors });
 							handleSubmit()
 						}}>

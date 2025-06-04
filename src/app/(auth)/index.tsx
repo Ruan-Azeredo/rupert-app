@@ -20,7 +20,7 @@ export default function Index() {
 
 	return (
 		<ParallaxScrollView
-			headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+			headerBackgroundColor={{ light: '#16a34a', dark: '#16a34a' }}
 			headerImage={
 				<Image
 					source={require('@/assets/images/bg-foods.png')}
@@ -125,7 +125,7 @@ export default function Index() {
 								console.log('handleSubmit', { values, errors });
 								handleSubmit()
 							}}
-							className="w-full"
+							className="w-full bg-green-600"
 							>
 								<ButtonText>Confirmar</ButtonText>
 							</Button>
@@ -133,7 +133,7 @@ export default function Index() {
 								href={{
 								pathname: '/(auth)/signin'
 							}}>
-								<Text className="font-semibold">Ainda não tenho conta.</Text>
+								<Text className="font-semibold text-green-600">Ainda não tenho conta.</Text>
 							</Link>
 						</Box>
 					</Box>
