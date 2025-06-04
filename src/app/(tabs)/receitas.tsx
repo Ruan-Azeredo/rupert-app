@@ -1,7 +1,9 @@
 import RevenueCard from "@/src/components/RevenueCard";
 import { Box } from "@/src/components/ui/box";
+import { Input, InputField, InputIcon, InputSlot } from "@/src/components/ui/input";
+import { Search } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { ScrollView, Text } from "react-native";
+import { ScrollView } from "react-native";
 
 type Revnue = {
     createdAt: string; // ISO date string
@@ -37,11 +39,25 @@ export default function Receitas() {
 			}
             console.log('revenues fetched');
             setRevenues(rev);
+            setFilteredRevenues(rev);
 			
 		}).catch(error => {
 			console.log('Error fetching revenues:', error);
 		})
     }, [])
+
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredRevenues, setFilteredRevenues] = useState<Revnue[]>(revenues);
+
+    const searchRevenues = (query: string) => {
+        if(query.trim() === '') {
+            setFilteredRevenues(revenues)
+            return;
+        }
+        const searchTerm = searchQuery.toLowerCase()
+        setFilteredRevenues(revenues.filter(task => task.name.toLowerCase().includes(searchTerm)))
+    }
 
     return (
         <ScrollView
@@ -52,8 +68,17 @@ export default function Receitas() {
                 alignItems: "center", */
             }}
         >
-            <Text>I'm in tab</Text>
-            {revenues.map((revenue, index) => (
+            <Input className="my-1 w-full rounded-full border-gray-400 focus:border-gray-400">
+                <InputField
+                    type={"text"}
+                    placeholder="Procure uma receita!"
+                    onChangeText={text => { setSearchQuery(text); searchRevenues(text) }}
+                />
+                <InputSlot className="pr-3">
+                    <InputIcon as={Search}/>
+                </InputSlot>
+            </Input>
+            {filteredRevenues.map((revenue, index) => (
                 <Box className="my-3" key={index}>
                     <RevenueCard {...revenue} />
                 </Box>
