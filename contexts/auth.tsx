@@ -73,7 +73,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 			}
             console.log('users fetched', users);
 			const user = users.find((user: any) => user.email === email && user.password === password)
-			user ? setUser(user) : console.log('Usuário ou senha inválidos'); showNewToast('Ops!', 'Usuário ou senha inválidos');
+			if(user) {
+				setUser(user)
+			}  else {
+				console.log('Usuário ou senha inválidos')
+				showNewToast('Ops!', 'Usuário ou senha inválidos')
+			}
 		}).catch(error => {
 			console.log('Error fetching users:', error);
 			showNewToast('Ops!', 'Erro ao validar suar credenciais');
